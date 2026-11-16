@@ -11,7 +11,7 @@ export class CatalogController {
     return this.catalogService.getHello();
   }
 
-  @MessagePattern('service-ping')
+  @MessagePattern('service.ping')
   ping(){
     return this.catalogService.ping();
   }

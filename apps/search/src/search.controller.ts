@@ -11,7 +11,7 @@ export class SearchController {
     return this.searchService.getHello();
   }
 
-  @MessagePattern('service-ping')
+  @MessagePattern('service.ping')
     ping(){
       return this.searchService.ping();
     }

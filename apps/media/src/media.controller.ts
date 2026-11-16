@@ -11,7 +11,7 @@ export class MediaController {
     return this.mediaService.getHello();
   }
 
-  @MessagePattern('service-ping')
+  @MessagePattern('service.ping')
   ping(){
     return this.mediaService.ping();
   }
