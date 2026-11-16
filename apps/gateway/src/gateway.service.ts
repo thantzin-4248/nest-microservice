@@ -5,4 +5,6 @@ export class GatewayService {
   getHello(): string {
     return 'Hello World!';
   }
+
+  
 }

@@ -7,22 +7,28 @@ async function bootstrap() {
   process.title = 'catalog';
 
   const logger = new Logger('Catalog');
-  const port = Number(process.env.CATALOG_PORT) || 4011;
+  //const port = Number(process.env.CATALOG_PORT) || 4011;
 
+  const rmqUrl = process.env.RABBITMQ_URL || 'amqp://localhost:5672';
+
+  const queue = process.env.CATALOG_QUEUE ?? 'catalog_queue';
   //miscroservice instance
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     CatalogModule,
     {
-      transport: Transport.TCP,
+      transport: Transport.RMQ,
       options: {
-        host: '0.0.0.0',
-        port: port,
+        urls: [rmqUrl],
+        queue,
+        queueOptions: {
+          durable: false,
+        },
       },
     },
   );
 
   app.enableShutdownHooks();
   await app.listen();
-  logger.log(`Catalog microservice (TCP)is running on: ${port}`);
+  logger.log(`Catalog RMQ listening on queue: ${queue} via ${rmqUrl}`);
 }
 await bootstrap();

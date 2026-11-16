@@ -5,4 +5,12 @@ export class MediaService {
   getHello(): string {
     return 'Hello World!';
   }
+
+  ping(){
+    return{
+      ok: true,
+      service: 'catalog',
+      now: new Date().toISOString()
+    }
+  }
 }
