@@ -2,9 +2,25 @@ import { Module } from '@nestjs/common';
 import { GatewayController } from './gateway.controller.js';
 import { GatewayService } from './gateway.service.js';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module.js';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    // connect our gateway with mongo user
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI') ?? 'mongodb://localhost:27017/nest',
+      }),
+    }),
+    AuthModule,
     ClientsModule.register([
       {
         name: 'CATALOG_CLIENT',

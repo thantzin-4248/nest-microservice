@@ -9,7 +9,7 @@ export class SearchService {
   ping(){
     return{
       ok: true,
-      service: 'catalog',
+      service: 'search',
       now: new Date().toISOString()
     }
   }
