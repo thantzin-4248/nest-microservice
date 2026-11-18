@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { CatalogModule } from './catalog.module.js';
-import { INestMicroservice, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { applyToMicroserviceLayer } from '@app/rpc';
 
 async function bootstrap() {
   process.title = 'catalog';
@@ -27,14 +28,11 @@ async function bootstrap() {
     },
   );
 
-  applyToMiscroserviceLayer(app);
+  applyToMicroserviceLayer(app);
   
   app.enableShutdownHooks();
   await app.listen();
   logger.log(`Catalog RMQ listening on queue: ${queue} via ${rmqUrl}`);
 }
 await bootstrap();
-function applyToMiscroserviceLayer(app: INestMicroservice) {
-  throw new Error('Function not implemented.');
-}
 
