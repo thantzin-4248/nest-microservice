@@ -18,10 +18,11 @@
     "skipLibCheck": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "types": [
-      "vitest/globals",
-      "node"
-    ]
+    "types": ["vitest/globals", "node"],
+    "paths": {
+      "@app/rpc": ["apps/libs/rpc/src/index.ts"],
+      "@app/rpc/*": ["apps/libs/rpc/src/*"]
+    }
   },
   "files": [],
   "references": [

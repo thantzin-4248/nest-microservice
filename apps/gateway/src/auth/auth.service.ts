@@ -19,7 +19,7 @@ export class AuthService {
         const verified: any = await verifyToken(token,this.jwtVerifyOptions());
 
         //decode payload
-        const payload = verified?.payload ?? verified?.payload ?? verified;
+        const payload =  verified?.payload ?? verified;
 
         // clerk user id -> payload.sub
         const clerkUserId = payload?.sub ?? payload?.userId;

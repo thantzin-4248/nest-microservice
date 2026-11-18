@@ -17,7 +17,10 @@ import { AuthModule } from './auth/auth.module.js';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI') ?? 'mongodb://localhost:27017/nest',
+        uri:
+          configService.get<string>('MONGODB_URI_USER') ??
+          configService.get<string>('MONGODB_URI') ??
+          'mongodb://localhost:27017/nest',
       }),
     }),
     AuthModule,
