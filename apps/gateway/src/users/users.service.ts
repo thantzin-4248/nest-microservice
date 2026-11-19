@@ -29,7 +29,7 @@ export class UsersService {
                 role: 'user'
             }
         },{
-            new:true,
+            returnDocument: 'after',
             upsert: true,
             setDefaultsOnInsert: true
         })

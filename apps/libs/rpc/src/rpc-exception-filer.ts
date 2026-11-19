@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch } from "@nestjs/common";
+import { ArgumentsHost, Catch, Logger } from "@nestjs/common";
 import { BaseRpcExceptionFilter, RpcException } from "@nestjs/microservices";
 import { RpcErrorPayload } from "./rpc.types.js";
 
@@ -6,20 +6,28 @@ import { RpcErrorPayload } from "./rpc.types.js";
 // our payload structure should follow the way that we want
 @Catch()
 export class RpcAllExceptionFilter extends BaseRpcExceptionFilter{
+   private readonly logger = new Logger(RpcAllExceptionFilter.name);
+
    catch(exception: any, host: ArgumentsHost){
     if(exception instanceof RpcException){
         return super.catch(exception, host)
     }
 
-    const ctx = host.switchToHttp();
-    const response  = ctx.getResponse<Response>();
     const status = exception?.getStatus?.();
+    const errorMessage =
+      exception instanceof Error
+        ? exception.stack ?? exception.message
+        : typeof exception === 'string'
+          ? exception
+          : typeof exception?.message === 'string'
+            ? exception.message
+            : 'Unknown RPC error';
+    this.logger.error(errorMessage);
 
     if(status === 400){
         const payload: RpcErrorPayload = {
             code: 'VALIDATION_ERROR',
-            message: 'Validation Failed',
-            details: response
+            message: 'Validation Failed'
         }
 
         return super.catch(new RpcException(payload), host);
@@ -27,8 +35,7 @@ export class RpcAllExceptionFilter extends BaseRpcExceptionFilter{
 
     const payload: RpcErrorPayload = {
             code: 'INTERNAL',
-            message: 'Internal Error',
-            details: response
+            message: 'Internal Error'
         }
 
         return super.catch(new RpcException(payload), host);
